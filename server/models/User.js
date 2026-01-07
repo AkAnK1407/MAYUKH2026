@@ -25,6 +25,12 @@ const userSchema = new mongoose.Schema(
       minlength: 6,
       select: false // Don't return password by default
     },
+    role: {
+      type: String,
+      enum: ['Core', 'Subcore', 'Participant'],
+      required: [true, 'Please select a role'],
+      default: 'Participant'
+    },
     createdAt: {
       type: Date,
       default: Date.now
