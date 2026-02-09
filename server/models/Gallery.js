@@ -1,23 +1,13 @@
 const mongoose = require('mongoose');
 
 const gallerySchema = new mongoose.Schema({
-  imageUrl: {
-    type: String,
-    required: true,
-    description: "Base64 string or path to the uploaded image"
-  },
-  category: {
-    type: String,
-    default: 'theme', // 'theme', 'event', 'campus', etc.
-  },
-  title: {
-    type: String,
-    trim: true
-  },
-  uploadedAt: {
-    type: Date,
-    default: Date.now
+  imageUrl: { type: String, required: true },
+  caption: { type: String, trim: true },
+  category: { 
+    type: String, 
+    default: 'fest',
+    enum: ['fest', 'spy-verse', 'scifi-verse', 'carnival-verse', 'dark-verse', 'mythic-verse']
   }
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('Gallery', gallerySchema);

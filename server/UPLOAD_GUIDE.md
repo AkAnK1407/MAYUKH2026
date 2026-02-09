@@ -21,7 +21,7 @@
 
 #### Using Postman:
 
-**POST** `http://localhost:5000/api/auth/signup`
+**POST** `http://localhost:5001/api/auth/signup`
 
 **Body (JSON):**
 ```json
@@ -53,7 +53,7 @@
 
 ### **Step 2: Login (If you already have an account)**
 
-**POST** `http://localhost:5000/api/auth/login`
+**POST** `http://localhost:5001/api/auth/login`
 
 **Body (JSON):**
 ```json
@@ -83,7 +83,7 @@
 1. **Open Postman**
 2. **Create new request:**
    - Method: `POST`
-   - URL: `http://localhost:5000/api/events/upload-poster`
+   - URL: `http://localhost:5001/api/events/upload-poster`
 
 3. **Headers:**
    - Key: `Authorization`
@@ -113,7 +113,7 @@
 #### Method 2: Using cURL (Terminal)
 
 ```bash
-curl -X POST http://localhost:5000/api/events/upload-poster \
+curl -X POST http://localhost:5001/api/events/upload-poster \
   -H "Authorization: Bearer YOUR_TOKEN_HERE" \
   -F "poster=@/path/to/your/image.jpg"
 ```
@@ -136,7 +136,7 @@ const fileInput = document.getElementById('posterInput'); // Your file input
 formData.append('poster', fileInput.files[0]);
 
 // 3. Upload to Cloudinary
-const response = await fetch('http://localhost:5000/api/events/upload-poster', {
+const response = await fetch('http://localhost:5001/api/events/upload-poster', {
   method: 'POST',
   headers: {
     'Authorization': `Bearer ${token}`
@@ -155,7 +155,7 @@ console.log('Poster URL:', data.posterLink);
 
 Now use the `posterLink` from Step 3 to create an event:
 
-**POST** `http://localhost:5000/api/events`
+**POST** `http://localhost:5001/api/events`
 
 **Headers:**
 - `Authorization: Bearer YOUR_TOKEN`
@@ -247,7 +247,7 @@ Create a simple HTML file to test:
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await fetch('http://localhost:5001/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -276,7 +276,7 @@ Create a simple HTML file to test:
       const formData = new FormData();
       formData.append('poster', fileInput.files[0]);
 
-      const response = await fetch('http://localhost:5000/api/events/upload-poster', {
+      const response = await fetch('http://localhost:5001/api/events/upload-poster', {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
         body: formData
@@ -313,7 +313,7 @@ Create a simple HTML file to test:
         status: "upcoming"
       };
 
-      const response = await fetch('http://localhost:5000/api/events', {
+      const response = await fetch('http://localhost:5001/api/events', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -337,7 +337,7 @@ Create a simple HTML file to test:
 
 ## ✅ Quick Test Checklist
 
-- [ ] Server running on port 5000
+- [ ] Server running on port 5001
 - [ ] Core/Subcore user created
 - [ ] Login successful (got token)
 - [ ] Upload poster endpoint working
@@ -358,7 +358,7 @@ Create a simple HTML file to test:
 ### Check MongoDB:
 ```javascript
 // In MongoDB Compass or via API
-GET http://localhost:5000/api/events
+GET http://localhost:5001/api/events
 // Should show your created event with posterLink
 ```
 
