@@ -39,7 +39,7 @@
    ```
    MONGODB_URI=mongodb+srv://mayukh_user:YOUR_PASSWORD@YOUR_CLUSTER.mongodb.net/mayukh?retryWrites=true&w=majority
    JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
-   PORT=5000
+   PORT=5001
    NODE_ENV=development
    
    # Cloudinary (for image uploads)
@@ -53,7 +53,7 @@
    npm run dev
    ```
    
-   You should see: `MongoDB connected successfully` and `Server running on port 5000`
+   You should see: `MongoDB connected successfully` and `Server running on port 8000`
 
 ## Step 3: Use Authentication in Frontend
 
