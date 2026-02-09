@@ -1,7 +1,7 @@
 // Frontend API helper for authentication
 // Dynamically determine API base URL for production/development
 const API_BASE_URL = window.location.hostname === 'localhost' 
-  ? 'http://localhost:5000/api' 
+  ? 'http://localhost:5001/api' 
   : '/api';
 
 // Sign up a new user

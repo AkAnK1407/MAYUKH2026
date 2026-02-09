@@ -108,6 +108,16 @@
       transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
       position: relative;
       overflow: hidden;
+      /* Ensure text/icon inside centers properly */
+      flex-direction: column; 
+    }
+
+    .photo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 30px;
+      transition: all 0.6s ease;
     }
 
     .photo-box img {
@@ -221,10 +231,14 @@
     .photo-box::before {
       content: "";
       position: absolute;
+<<<<<<< HEAD
+      top: 0; left: 0; right: 0; bottom: 0;
+=======
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
+>>>>>>> cacb304b89ff9a7114f80afc0a20b2e02c8ac57c
       background: linear-gradient(135deg, var(--team-color)00 0%, var(--team-color)20 100%);
       opacity: 0;
       transition: opacity 0.6s ease;
@@ -232,9 +246,13 @@
       border-radius: 30px;
     }
 
+<<<<<<< HEAD
+    .photo-container:hover .photo-box::before { opacity: 1; }
+=======
     .photo-container:hover .photo-box::before {
       opacity: 1;
     }
+>>>>>>> cacb304b89ff9a7114f80afc0a20b2e02c8ac57c
   </style>
 </head>
 <body>
@@ -267,6 +285,133 @@
   </section>
 
   <main class="relative z-10 pb-40 px-8 flex flex-col items-center">
+<<<<<<< HEAD
+    <div id="teams-container" class="max-w-6xl w-full space-y-96"></div>
+  </main>
+
+  <script>
+    // --- API Configuration ---
+    const API_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? 'http://localhost:5001/api/teams'
+        : '/api/teams';
+
+    // --- Hardcoded Theme Colors (Same as original) ---
+    const teamColors = {
+      "Technical": "#3bc4ff", 
+      "Cultural": "#ff00ff", 
+      "PR": "#7c6bff",
+      "Sponsorship": "#ffd700", 
+      "Design": "#00ff7f", 
+      "Catering": "#ff7f50",
+      "Workshop": "#00ffff", 
+      "Discipline": "#ff4d4d", 
+      "Coverage": "#ffffff",
+      "Drama": "#a855f7"
+    };
+
+    const container = document.getElementById('teams-container');
+
+    // --- Fetch Logic ---
+    async function fetchAndRenderTeams() {
+        try {
+            const res = await fetch(API_URL);
+            const members = await res.json();
+
+            // 1. Group Data by Team Name & Type
+            const groupedTeams = members.reduce((acc, member) => {
+                const tName = member.teamName;
+                if (!acc[tName]) {
+                    acc[tName] = { 
+                        name: tName, 
+                        color: teamColors[tName] || '#3bc4ff', 
+                        core: [], 
+                        sub: [] 
+                    };
+                }
+                if (member.memberType === 'Core') acc[tName].core.push(member);
+                else acc[tName].sub.push(member);
+                return acc;
+            }, {});
+
+            container.innerHTML = '';
+            
+            // 2. Predefined Order (Strictly maintained)
+            const order = ['Technical', 'PR', 'Drama', 'Cultural', 'Sponsorship', 'Design', 'Catering', 'Workshop', 'Discipline', 'Coverage'];
+
+            order.forEach(teamName => {
+                const team = groupedTeams[teamName];
+                if (!team) return; // Skip if no data
+
+                // Create the Section
+                const section = document.createElement('section');
+                section.className = 'team-section';
+                section.style.setProperty('--team-color', team.color);
+                section.style.setProperty('--shadow-color', team.color + '44');
+                
+                // Helper to render members within the EXACT original visual structure
+                const renderMembers = (list, type) => {
+                    // IF NO MEMBERS: Show Placeholder that fits the style
+                    if(!list || list.length === 0) {
+                        return `
+                        <div class="photo-box">
+                            <i class="fa-solid fa-user-secret text-6xl opacity-20" style="color:${team.color}"></i>
+                            <span class="orbitron text-xs mt-2 opacity-50 tracking-widest">COMING SOON</span>
+                        </div>
+                        <p class="description-text">Pending Data...</p>
+                        `;
+                    }
+
+                    // IF MEMBERS EXIST: Render them using the same photo-box styling
+                    // Note: We use flex-wrap to handle multiple members in one column
+                    const membersHtml = list.map(m => `
+                        <div class="flex flex-col items-center w-full mb-8">
+                             <div class="photo-box">
+                                <img src="${m.imageUrl}" alt="${m.name}" loading="lazy" />
+                             </div>
+                             <p class="description-text">${m.name}</p>
+                        </div>
+                    `).join('');
+
+                    // If multiple members, use a grid layout inside the column
+                    if(list.length > 1) {
+                         return `<div class="w-full flex flex-col gap-8">${membersHtml}</div>`;
+                    }
+                    return membersHtml;
+                };
+
+                // Inject HTML (Strictly matching original structure)
+                section.innerHTML = `
+                  <div class="flex flex-col items-center w-full">
+                    <h2 class="orbitron team-title text-center">${team.name}</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-24 w-full px-4">
+                      
+                      <div class="photo-container text-center group w-full">
+                        <span class="member-label">CORE MEMBERS</span>
+                        ${renderMembers(team.core, 'Core')}
+                      </div>
+
+                      <div class="photo-container text-center group w-full">
+                        <span class="member-label">SUB-CORE MEMBERS</span>
+                        ${renderMembers(team.sub, 'Sub')}
+                      </div>
+                      
+                    </div>
+                  </div>
+                `;
+                
+                container.appendChild(section);
+                
+                // Re-attach observer for animation
+                if(typeof observer !== 'undefined') observer.observe(section);
+            });
+
+        } catch (err) {
+            console.error("Error loading teams:", err);
+            container.innerHTML = `<p class="text-center text-red-500 font-mono">System Offline: Ensure Backend is running on Port 5001</p>`;
+        }
+    }
+=======
     <div id="teams-container" class="max-w-6xl w-full space-y-96">
       <!-- Teams will be dynamically inserted here -->
     </div>
@@ -372,6 +517,7 @@
       `;
       container.appendChild(section);
     });
+>>>>>>> cacb304b89ff9a7114f80afc0a20b2e02c8ac57c
 
     // --- Typewriter Effect ---
     const text = "ARCHITECTS OF THE MULTIVERSE";
@@ -383,8 +529,7 @@
         setTimeout(typeWriter, 100);
       }
     }
-    window.onload = typeWriter;
-
+    
     // --- Dynamic Parallax Starfield ---
     const canvas = document.getElementById('star-canvas');
     const ctx = canvas.getContext('2d');
@@ -421,10 +566,6 @@
       requestAnimationFrame(animateStars);
     }
 
-    initStars();
-    animateStars();
-    window.addEventListener('resize', initStars);
-
     // --- Scroll Glow & Reveal Observer ---
     const bgGlow = document.getElementById('bg-glow');
     const observer = new IntersectionObserver((entries) => {
@@ -437,68 +578,45 @@
       });
     }, { threshold: 0.25 });
 
-    document.querySelectorAll('.team-section').forEach(s => observer.observe(s));
-
-    // --- Dynamic Scroll Button with Direction Control ---
+    // --- Dynamic Scroll Button ---
     const scrollToTopBtn = document.getElementById('scroll-to-top');
     let lastScrollTop = 0;
     let isScrollingDown = false;
 
     function updateButtonFunction() {
       const isAtBottom = window.pageYOffset + window.innerHeight >= document.documentElement.scrollHeight - 100;
-      
-      // Force upward at bottom
-      if (isAtBottom) {
-        isScrollingDown = false;
-      }
+      if (isAtBottom) isScrollingDown = false;
 
-      // Update icon based on current direction
       const icon = scrollToTopBtn.querySelector('i');
-      if (isScrollingDown) {
-        icon.className = 'fa-solid fa-chevron-down';
-      } else {
-        icon.className = 'fa-solid fa-chevron-up';
-      }
+      if (isScrollingDown) icon.className = 'fa-solid fa-chevron-down';
+      else icon.className = 'fa-solid fa-chevron-up';
 
-      // Update click handler
       scrollToTopBtn.onclick = () => {
-        if (isScrollingDown) {
-          window.scrollBy({
-            top: window.innerHeight,
-            behavior: 'smooth'
-          });
-        } else {
-          window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-          });
-        }
+        if (isScrollingDown) window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
+        else window.scrollTo({ top: 0, behavior: 'smooth' });
       };
     }
 
     window.addEventListener('scroll', () => {
       const currentScroll = window.pageYOffset;
-      
-      // Detect scroll direction
-      if (currentScroll > lastScrollTop) {
-        isScrollingDown = true;
-      } else {
-        isScrollingDown = false;
-      }
+      if (currentScroll > lastScrollTop) isScrollingDown = true;
+      else isScrollingDown = false;
       lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
 
-      // Update button visibility
-      if (window.pageYOffset > 300) {
-        scrollToTopBtn.classList.add('show');
-      } else {
-        scrollToTopBtn.classList.remove('show');
-      }
-
+      if (window.pageYOffset > 300) scrollToTopBtn.classList.add('show');
+      else scrollToTopBtn.classList.remove('show');
       updateButtonFunction();
     });
 
-    // Initial setup
-    updateButtonFunction();
+    // --- EXECUTE ---
+    window.onload = () => {
+        typeWriter();
+        initStars();
+        animateStars();
+        window.addEventListener('resize', initStars);
+        updateButtonFunction();
+        fetchAndRenderTeams(); // Call the dynamic Fetch
+    };
   </script>
 </body>
 </html>

@@ -102,7 +102,7 @@ server/
 | `CLOUDINARY_CLOUD_NAME` | `config/cloudinary.js` | Cloudinary config |
 | `CLOUDINARY_API_KEY` | `config/cloudinary.js` | Cloudinary authentication |
 | `CLOUDINARY_API_SECRET` | `config/cloudinary.js` | Cloudinary authentication |
-| `PORT` | `server.js` | Server port (default: 5000) |
+| `PORT` | `server.js` | Server port (default: 5001) |
 
 ---
 

@@ -1,9 +1,12 @@
+<<<<<<< HEAD
+=======
 // API Configuration - determines the correct API URL based on environment
 
+>>>>>>> cacb304b89ff9a7114f80afc0a20b2e02c8ac57c
 const API_CONFIG = {
-  // Auto-detect: use localhost for development, relative path for production
-  BASE_URL: window.location.hostname === 'localhost' 
-    ? 'http://localhost:5000' 
+  // Fix: Check for BOTH 'localhost' AND '127.0.0.1'
+  BASE_URL: (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? 'http://localhost:5001' 
     : '',
 
   
@@ -21,6 +24,6 @@ const API_CONFIG = {
 };
 
 // Export for use in other scripts
-if (typeof module !== 'undefined' && module.exports) {
+if (typeof module !== 'undefined') {
   module.exports = API_CONFIG;
 }
