@@ -46,7 +46,7 @@ Open `server/.env` and add these three lines:
 
 ```env
 MONGODB_URI=mongodb+srv://bs:bs123@mayukhdb.bvghhzk.mongodb.net/?appName=MayukhDB
-PORT=5000
+PORT=5001
 JWT_SECRET=bs
 
 # Cloudinary Configuration
@@ -96,14 +96,14 @@ This will install:
 
    **Using curl:**
    ```bash
-   curl -X POST http://localhost:5000/api/events/upload-poster \
+   curl -X POST http://localhost:5001/api/events/upload-poster \
      -H "Authorization: Bearer YOUR_JWT_TOKEN" \
      -F "poster=@/path/to/your/image.jpg"
    ```
 
    **Using Postman:**
    - Method: POST
-   - URL: `http://localhost:5000/api/events/upload-poster`
+   - URL: `http://localhost:5001/api/events/upload-poster`
    - Headers: 
      - `Authorization: Bearer YOUR_JWT_TOKEN`
    - Body: form-data
