@@ -11,23 +11,27 @@ const { Readable } = require('stream');
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-// ==========================================
-// 1. CONFIGURATION
-// ==========================================
 
-app.use(cors({ 
-    origin: [
-        'https://mayukhbanasthali.com',           // Aapka professional domain
-        'https://mayukh2026.netlify.app',         // Netlify auto-generated link
-        'http://localhost:5173',                  // Vite (React) local development
-        'http://localhost:3000',                  // Create React App default port
-        'http://localhost:5001',                  // Aapka backend port (safety ke liye)
-        'http://127.0.0.1:5500'                   // VS Code Live Server (agar use kar rahe hain)
-    ],
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],    // Saari zaroori methods allow karein
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
+const allowedOrigins = [
+    "http://localhost:5001",
+    "http://127.0.0.1:5001",
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
+    "https://mayukh2026.netlify.app",
+    "https://mayukh-bv-1.onrender.com"
+];
+
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            console.log("Blocked by CORS:", origin);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true
+})); 
 app.use(express.json());
 // Isse admin.html aur media.html load hone lagenge
 app.use(express.static(path.join(__dirname, '../')));
@@ -417,6 +421,6 @@ app.put('/api/event-alerts/:id', async (req, res) => {
 
 // --- SERVER START ---
 app.listen(PORT, () => {
-    console.log(`\n🚀 SERVER STARTED ON PORT: ${PORT}`);
+    console.log(`\n SERVER STARTED ON PORT: ${PORT}`);
     console.log(`📡 Waiting for Database connection...\n`);
 });
