@@ -11,9 +11,6 @@ const { Readable } = require('stream');
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-// ==========================================
-// 1. CONFIGURATION
-// ==========================================
 
 const allowedOrigins = [
     "http://localhost:5001",
@@ -424,6 +421,6 @@ app.put('/api/event-alerts/:id', async (req, res) => {
 
 // --- SERVER START ---
 app.listen(PORT, () => {
-    console.log(`\n🚀 SERVER STARTED ON PORT: ${PORT}`);
+    console.log(`\n SERVER STARTED ON PORT: ${PORT}`);
     console.log(`📡 Waiting for Database connection...\n`);
 });
